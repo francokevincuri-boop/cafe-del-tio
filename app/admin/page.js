@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
+import PasswordGate from '../components/PasswordGate'
 
 const menuData = [
   { id: 1, name: 'Espresso', price: 1200, cat: 'Cafés' },
@@ -203,6 +204,7 @@ export default function AdminPanel() {
   }
 
   return (
+    <PasswordGate titulo="Panel Admin" subtitulo="El Rincón del Tío · Área privada">
     <>
       <style>{css}</style>
       <div className="admin">
@@ -369,5 +371,6 @@ export default function AdminPanel() {
         </div>
       </div>
     </>
+    </PasswordGate>
   )
 }

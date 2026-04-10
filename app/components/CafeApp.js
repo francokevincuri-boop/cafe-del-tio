@@ -1,5 +1,6 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { supabase } from '../lib/supabase'
 
 const menuData = [
@@ -133,6 +134,11 @@ const css = `
 `
 
 export default function CafeApp() {
+  const searchParams = useSearchParams()
+  const mesaParam = searchParams.get('mesa')
+  const mesaNumero = mesaParam ? parseInt(mesaParam, 10) : null
+  const mesaLabel = mesaNumero ? `Mesa ${mesaNumero}` : 'Mesa'
+
   const [screen, setScreen] = useState('home')
   const [prevScreen, setPrevScreen] = useState(null)
   const [guests, setGuests] = useState(2)
@@ -213,7 +219,7 @@ export default function CafeApp() {
       })
       const { error: errPedido } = await supabase
         .from('pedidos')
-        .insert([{ mesa: 'Mesa #3', items: itemsDetalle, total: totalPrice, notas: notes }])
+        .insert([{ mesa: mesaLabel, mesa_numero: mesaNumero, items: itemsDetalle, total: totalPrice, notas: notes, origen: 'qr' }])
       if (errPedido) throw errPedido
       go('done')
     } catch (e) {
@@ -282,7 +288,7 @@ export default function CafeApp() {
                 </span>
               </button>
             </div>
-            <p className="home-footer">Escaneaste el QR de tu mesa · Mesa #3</p>
+            {mesaNumero && <p className="home-footer">Escaneaste el QR de tu mesa · {mesaLabel}</p>}
           </div>
         )}
 
@@ -364,7 +370,7 @@ export default function CafeApp() {
               <button className="back-btn" onClick={() => go('home')}>←</button>
               <div>
                 <div className="header-title">Menú del día</div>
-                <div className="header-sub">Pedí desde tu mesa · Mesa #3</div>
+                <div className="header-sub">Pedí desde tu mesa · {mesaLabel}</div>
               </div>
             </div>
             <div className="menu-screen"><MenuItems /></div>

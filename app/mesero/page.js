@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { supabase } from '../lib/supabase'
+import PasswordGate from '../components/PasswordGate'
 
 const menuData = [
   { id: 1, name: 'Espresso', price: 1200, cat: '☕ Cafés' },
@@ -140,6 +141,7 @@ export default function MeseroPanel() {
   const itemsFiltrados = menuData.filter(i => i.cat === catActiva)
 
   return (
+    <PasswordGate titulo="Pantalla Mesero" subtitulo="El Rincón del Tío · Acceso interno">
     <>
       <style>{css}</style>
       <div className="mesero">
@@ -253,5 +255,6 @@ export default function MeseroPanel() {
 
       </div>
     </>
+    </PasswordGate>
   )
 }
